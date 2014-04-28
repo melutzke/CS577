@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 public class ConcurrentSkipList<T> {
-    static final int MAX_LEVEL = 64;
+    static final int MAX_LEVEL = 64; // Limits list height
     final Node<T> head = new Node<T>(Integer.MIN_VALUE);
     final Node<T> tail = new Node<T>(Integer.MAX_VALUE);
 
@@ -129,6 +129,8 @@ public class ConcurrentSkipList<T> {
         return (int) (MAX_LEVEL - Math.log10(random) / Math.log10(2));
     }
 
+    /* ----- NODE CLASS ----- */
+    
     private static final class Node<T> {
         final Lock lock = new ReentrantLock();
         final T item;
