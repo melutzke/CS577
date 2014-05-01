@@ -1,0 +1,51 @@
+package com.heymitch.skiplist;
+
+import java.util.Random;
+import java.util.ArrayList;
+
+public class MainClass
+{
+	
+	public static void main(String[] args) 
+	{
+		ConcurrentSkipList<Integer> skipList = new ConcurrentSkipList<Integer>();
+		
+		for(int i = 0; i <= 10000; i++) {
+			skipList.add(i);
+		}
+		
+		ArrayList threadList = new ArrayList<MyThread>();
+		
+		for(int i = 0; i < 10; i++){
+			MyThread mt = new MyThread (skipList);
+		    mt.start ();
+		}
+		
+	    for (int i = 0; i < 50; i++)
+	         System.out.println ("i = " + i + ", i * i = " + i * i);
+		
+	    skipList.PrintList();
+
+	}
+}
+
+
+class MyThread extends Thread
+{
+   ConcurrentSkipList dataSet;
+   Random rand = new Random();
+   public MyThread(ConcurrentSkipList skipList){
+	   super();
+	   dataSet = skipList;
+   }
+   public void run ()
+   {
+	    for(int i = 0; i < 10000; i++){
+	    	dataSet.contains(rand.nextInt(10000));
+	    }
+//      for (int count = 1, row = 1; row < 20; row++, count++)
+//      {
+//           
+//      }
+   }
+}

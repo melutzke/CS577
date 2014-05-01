@@ -1,0 +1,38 @@
+package com.heymitch.skiplist;
+
+public class MainClass
+{
+	
+	public static void main(String[] args) 
+	{
+		ConcurrentSkipList<Integer> skipList = new ConcurrentSkipList<Integer>();
+		
+		for(int i = 1; i <= 10000; i++) {
+			skipList.add(i);
+		}
+		
+		MyThread mt = new MyThread (skipList);
+	      mt.start ();
+	      for (int i = 0; i < 50; i++)
+	           System.out.println ("i = " + i + ", i * i = " + i * i);
+		
+		skipList.PrintList();
+	}
+}
+
+
+class MyThread extends Thread
+{
+   public MyThread(ConcurrentSkipList skipList){
+	   super();
+	   ConcurrentSkipList dataSet = skipList;
+   }
+   public void run ()
+   {
+	    dataSet.contains("99");
+//      for (int count = 1, row = 1; row < 20; row++, count++)
+//      {
+//           
+//      }
+   }
+}

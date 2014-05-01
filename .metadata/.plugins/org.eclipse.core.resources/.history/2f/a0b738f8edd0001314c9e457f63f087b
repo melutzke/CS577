@@ -1,0 +1,14 @@
+package com.heymitch.skiplist;
+
+public class MainClass
+{
+	
+	public static void main(String[] args) 
+	{
+        ConcurrentSkipSkipList<Integer> skipList = new ConcurrentSkipSkipList<Integer>();
+		
+		for(int i = 1; i <= 1000; i++) {
+			skipList.add(i);
+		}
+	}
+}

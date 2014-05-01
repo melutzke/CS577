@@ -1,0 +1,12 @@
+{
+  "C:\\Program Files\\Java\\jre8\\lib\\rt.jar": {
+    "coordinate": "jre:jre:zip:call:1.0.0",
+    "location": "C:\\Program Files\\Java\\jre8\\lib\\rt.jar",
+    "status": "RESOLVED"
+  },
+  "C:\\Users\\Mitchell\\Documents\\GitHub\\skiplist\\SkipList\\src": {
+    "location": "C:\\Users\\Mitchell\\Documents\\GitHub\\skiplist\\SkipList\\src",
+    "status": "UNRESOLVED",
+    "error": "No class path info available for \u0027C:\\Users\\Mitchell\\Documents\\GitHub\\skiplist\\SkipList\\src\u0027. Skipped."
+  }
+}
