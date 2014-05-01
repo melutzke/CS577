@@ -70,6 +70,7 @@ public class ConcurrentSkipList<T> {
 		// set top level we've inserted a node, prevents unnecessarily
 		// looking at empty levels during a find
 		if( topLevel > max_level_inserted ) max_level_inserted = topLevel;
+		//System.out.println("Node " + x + " inserted at level " + topLevel + " and below");
 		Node<T>[] preds = (Node<T>[]) new Node[MAX_LEVEL + 1];	// an array of nodes directly previous to the
 		// node we're adding at EACH LEVEL
 		// this varies, because not all nodes are at
@@ -143,7 +144,7 @@ public class ConcurrentSkipList<T> {
 				// to true, so other threads know this node is good for use
 				return true;				// return true to indicate the node has been successfully added and fully linked
 			} finally {
-				System.out.println(num_locked_nodes + " nodes locked when adding " + x);
+				//System.out.println(num_locked_nodes + " nodes locked when adding " + x);
 				num_locked_nodes = 0;
 				for (int level = 0; level <= highestLocked; level++)
 					preds[level].unlock();	// unlock the predecessors we locked previously at each level
@@ -196,8 +197,18 @@ public class ConcurrentSkipList<T> {
 
 
 	private int randomLevel() {
-		long random = (long) (Math.random() * Math.pow(2, MAX_LEVEL));
-		return (int) (MAX_LEVEL - Math.log10(random) / Math.log10(2));
+		int level = 0;
+		boolean heads = false;
+		
+		while(!heads && level <= MAX_LEVEL) {
+			heads = (Math.random() > 0.5);
+			
+			if(!heads) {
+				level++;
+			}
+		}
+		
+		return level;
 	}
 
 	public void PrintList() {
