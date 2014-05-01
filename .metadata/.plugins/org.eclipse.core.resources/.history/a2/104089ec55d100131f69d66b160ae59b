@@ -9,30 +9,26 @@ public class MainClass
 	{
 		ConcurrentSkipList<Integer> skipList = new ConcurrentSkipList<Integer>();
 		
-		for(int i = 0; i <= 10000; i++) { // add 0 through 10,000 to skipList
+		for(int i = 0; i <= 10000; i++) {
 			skipList.add(i);
 		}
 		
-		ArrayList threadList = new ArrayList<ContainsTest>();	// arrayList of CointainsTest threads
+		ArrayList threadList = new ArrayList<ContainsTest>();
 		
-		for(int i = 0; i < 10; i++){							// create the ContainsTest threads (10)
+		
+		for(int i = 0; i < 10; i++){
 			ContainsTest mt = new ContainsTest (skipList, i);
-		    threadList.add(mt);									// add it to the array list
+		    threadList.add(mt);
 		}
 		
 		Iterator<ContainsTest> threadItr = threadList.iterator();
 		
 		long startTime = System.nanoTime();
 		
-		while( threadItr.hasNext() ){							// start each thread
-			ContainsTest current = threadItr.next();
-			current.start();
-		}
-		
-		threadItr = threadList.iterator();
-		while( threadItr.hasNext() ){							// 
-			try {												// call join on it so main waits for it
+		while( threadItr.hasNext() ){
+			try {
 				ContainsTest current = threadItr.next();
+				current.start();
 				current.join();
 			} catch (InterruptedException e) {
 				System.out.println("Interrupted, but nobody cares :D");

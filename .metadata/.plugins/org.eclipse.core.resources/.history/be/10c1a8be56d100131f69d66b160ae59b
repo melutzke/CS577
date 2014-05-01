@@ -15,6 +15,7 @@ public class MainClass
 		
 		ArrayList threadList = new ArrayList<ContainsTest>();	// arrayList of CointainsTest threads
 		
+		
 		for(int i = 0; i < 10; i++){							// create the ContainsTest threads (10)
 			ContainsTest mt = new ContainsTest (skipList, i);
 		    threadList.add(mt);									// add it to the array list
@@ -24,15 +25,16 @@ public class MainClass
 		
 		long startTime = System.nanoTime();
 		
-		while( threadItr.hasNext() ){							// start each thread
+		while( threadItr.hasNext() ){
 			ContainsTest current = threadItr.next();
 			current.start();
 		}
 		
 		threadItr = threadList.iterator();
-		while( threadItr.hasNext() ){							// 
+		while( threadItr.hasNext() ){							// start each thread
 			try {												// call join on it so main waits for it
 				ContainsTest current = threadItr.next();
+				System.out.println("Before join");
 				current.join();
 			} catch (InterruptedException e) {
 				System.out.println("Interrupted, but nobody cares :D");

@@ -24,15 +24,16 @@ public class MainClass
 		
 		long startTime = System.nanoTime();
 		
-		while( threadItr.hasNext() ){							// start each thread
+		while( threadItr.hasNext() ){
 			ContainsTest current = threadItr.next();
 			current.start();
 		}
 		
 		threadItr = threadList.iterator();
-		while( threadItr.hasNext() ){							// 
+		while( threadItr.hasNext() ){							// start each thread
 			try {												// call join on it so main waits for it
 				ContainsTest current = threadItr.next();
+				System.out.println("Before join");
 				current.join();
 			} catch (InterruptedException e) {
 				System.out.println("Interrupted, but nobody cares :D");
