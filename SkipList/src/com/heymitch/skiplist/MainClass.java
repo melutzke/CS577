@@ -9,7 +9,7 @@ public class MainClass
 	{
 		ConcurrentSkipList<Integer> skipList = new ConcurrentSkipList<Integer>();
 		
-		for(int i = 0; i <= 10000; i++) { // add 0 through 10,000 to skipList
+		for(int i = 0; i <= 100; i++) { // add 0 through 10,000 to skipList
 			skipList.add(i);
 		}
 		
@@ -41,7 +41,7 @@ public class MainClass
 		
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime) / 1000000;
-		
+		skipList.PrintList();
 		System.out.println("Test took " + duration + "ms");
 	}
 }
@@ -63,8 +63,8 @@ class ContainsTest extends Thread
    }
    public void run ()
    {
-	    for(int i = 0; i < 10000; i++){
-	    	dataSet.contains(rand.nextInt(10000));
+	    for(int i = 0; i < 100; i++){
+	    	dataSet.contains(rand.nextInt(100));
 	    }
 	    System.out.println("Thread finishing: " + this.num);
    }
