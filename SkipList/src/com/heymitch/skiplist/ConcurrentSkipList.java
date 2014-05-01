@@ -10,11 +10,14 @@ public class ConcurrentSkipList<T> {
     final Node<T> tail = new Node<T>(Integer.MAX_VALUE);
 
     public ConcurrentSkipList() {
+    	//System.out.println("creating skip list");
         for (int i = 0; i < head.next.length; i++) {
+        	//System.out.println("making another node the tail (" + (i+1) + ")");
             head.next[i] = tail;
         }
     }
 
+    // returns true if the value is in the list
     boolean contains(T x) {
         Node<T>[] preds = (Node<T>[]) new Node[MAX_LEVEL + 1];
         Node<T>[] succs = (Node<T>[]) new Node[MAX_LEVEL + 1];
@@ -24,6 +27,7 @@ public class ConcurrentSkipList<T> {
                 && !succs[lFound].marked);
     }
 
+    // returns the index at which the node is 
     int find(T x, Node<T>[] preds, Node<T>[] succs) {
         int key = x.hashCode();
         int lFound = -1;
@@ -47,7 +51,9 @@ public class ConcurrentSkipList<T> {
         int topLevel = randomLevel();
         Node<T>[] preds = (Node<T>[]) new Node[MAX_LEVEL + 1];
         Node<T>[] succs = (Node<T>[]) new Node[MAX_LEVEL + 1];
+        
         while (true) {
+        	// check if the node is already in the list
             int lFound = find(x, preds, succs);
             if (lFound != -1) {
                 Node<T> nodeFound = succs[lFound];
@@ -57,6 +63,7 @@ public class ConcurrentSkipList<T> {
                 }
                 continue;
             }
+            
             int highestLocked = -1;
             try {
                 Node<T> pred, succ;
@@ -75,6 +82,7 @@ public class ConcurrentSkipList<T> {
                 for (int level = 0; level <= topLevel; level++)
                     preds[level].next[level] = newNode;
                 newNode.fullyLinked = true; // successful add linearization point
+                System.out.println(x + " added");
                 return true;
             } finally {
                 for (int level = 0; level <= highestLocked; level++)
@@ -128,6 +136,44 @@ public class ConcurrentSkipList<T> {
         long random = (long) (Math.random() * Math.pow(2, MAX_LEVEL));
         return (int) (MAX_LEVEL - Math.log10(random) / Math.log10(2));
     }
+    
+    public void PrintList() {
+    	Node<T> pred = head;
+    	int itemsPrinted = 0;
+    	boolean startPrinting = false;
+    	
+    	for(int level = MAX_LEVEL; level >= 0; level--) {
+    		Node<T> curr = pred.next[level];
+    		
+    		if(curr.item != null) {
+    			startPrinting = true;
+    		}
+    		
+    		if(startPrinting) {
+    			System.out.print("Level " + level + ": ");
+	    		if(curr.item != null) {
+	    			System.out.print(curr.item + " ");
+	    			itemsPrinted++;
+	    		} else {
+	    			System.out.print("empty");
+	    		}
+    		}
+    		
+    		while(curr.next[level]) {
+    			pred = curr;
+    			curr = pred.next[level];
+    			if(curr.item != null) {
+    				System.out.print(curr.item + " ");
+    				itemsPrinted++;
+    			}
+    			itemsPrinted++;
+    		}
+    		if(startPrinting) {
+    			System.out.println("");
+    		}
+    	}
+    	System.out.println(itemsPrinted + " items printed");
+    }
 
     /* ----- NODE CLASS ----- */
     
@@ -140,6 +186,7 @@ public class ConcurrentSkipList<T> {
         volatile boolean fullyLinked = false;
         private int topLevel;
 
+        // Constructor for first node
         public Node(int key) { // sentinel node constructor
             this.item = null;
             this.key = key;
@@ -147,6 +194,7 @@ public class ConcurrentSkipList<T> {
             topLevel = MAX_LEVEL;
         }
 
+        // Constructor for all other nodes
         public Node(T x, int height) {
             item = x;
             key = x.hashCode();

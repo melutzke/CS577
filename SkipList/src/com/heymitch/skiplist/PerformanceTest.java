@@ -2,7 +2,7 @@ package com.heymitch.skiplist;
 
 public class PerformanceTest {
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		ConcurrentSkipList<Integer> skiplist = new ConcurrentSkipList<Integer>();
 		
 		for(int i = 0; i < 10000; i+=2){
@@ -17,6 +17,6 @@ public class PerformanceTest {
 			}
 		}
 
-	}
+	}*/
 
 }
