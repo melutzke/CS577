@@ -39,10 +39,14 @@ public class ConcurrentSkipList<T> {
 
 	// returns the index at which the node is 
 	int find(T x, Node<T>[] preds, Node<T>[] succs) {
+		num_skips_fwd = 0; 
+		num_drop_downs = 0;
 		int key = x.hashCode();	// key is hashCode of whatever x is
 		int lFound = -1;
 		Node<T> pred = head;	// start looking at the HEAD of the list
 		for (int level = max_level_inserted; level >= 0; level--) {	// iterate over every LEVEL, starting w/ MAX_LEVEL
+			num_drop_downs = max_level_inserted - level;
+			
 			if(level > MAX_LEVEL) continue;			// fix case from my add-on that might cause us to look at invalid level
 			Node<T> curr = pred.next[level];		// current node (starts at HEAD, progresses forward, like linklist)
 			while (key > curr.key) {				// while the hashCode of element we want > hash of current node
@@ -51,6 +55,7 @@ public class ConcurrentSkipList<T> {
 				// in 367
 				pred = curr;						// update pred(ecessor) pointer to curr
 				curr = pred.next[level];			// update curr(ent) pointer to pred(ecessor).next at current level
+				num_skips_fwd++;
 				// each node stores an array of nexts, one for each level!
 				// we can look at a node, and say, what's your next for [x] level
 			}
@@ -66,6 +71,7 @@ public class ConcurrentSkipList<T> {
 	}
 
 	boolean add(T x) {
+		num_locked_nodes = 0;
 		int topLevel = randomLevel();							// get a randomLevel to make the toplevel of new node
 		// set top level we've inserted a node, prevents unnecessarily
 		// looking at empty levels during a find
