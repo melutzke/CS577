@@ -8,64 +8,87 @@ public class MainClass
 	public static void main(String[] args) 
 	{
 		ConcurrentSkipList<Integer> skipList = new ConcurrentSkipList<Integer>();
+		ConcurrentTreeMap<Integer, Integer> treeMap = new ConcurrentTreeMap<Integer, Integer>();
 		
-		for(int i = 0; i <= 100; i++) { // add 0 through 10,000 to skipList
+		ArrayList threadList = new ArrayList<ProgramThread>();	// arrayList of ProgramThread threads
+		
+		int numThreads = 8;
+		int numOperations = 100000;
+		
+		long startTime, duration;
+		
+		for(int i = 0; i <= 100000; i++) { // add 0 through 10,000 to each set
 			skipList.add(i);
+			treeMap.put(i,i);
 		}
 		
-		ArrayList threadList = new ArrayList<ContainsTest>();	// arrayList of CointainsTest threads
+		// test the skiplist!
 		
-		for(int i = 0; i < 10; i++){							// create the ContainsTest threads (10)
-			ContainsTest mt = new ContainsTest (skipList, i);
-		    threadList.add(mt);									// add it to the array list
+		for(int i = 0; i < numThreads; i++){
+			ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, "contains");
+		    threadList.add(newThread);									// add it to the array list
 		}
 		
-		Iterator<ContainsTest> threadItr = threadList.iterator();
+		Iterator<ProgramThread> threadItr = threadList.iterator();
 		
-		long startTime = System.nanoTime();
+		startTime = System.nanoTime();
 		
 		while( threadItr.hasNext() ){							// start each thread
-			ContainsTest current = threadItr.next();
+			ProgramThread current = threadItr.next();
 			current.start();
 		}
 		
 		threadItr = threadList.iterator();
-		while( threadItr.hasNext() ){							// 
+		while( threadItr.hasNext() ){	
 			try {												// call join on it so main waits for it
-				ContainsTest current = threadItr.next();
+				ProgramThread current = threadItr.next();
 				current.join();
 			} catch (InterruptedException e) {
 				System.out.println("Interrupted, but nobody cares :D");
 			}
 		}
+
+		duration = (System.nanoTime() - startTime);
+
+		System.out.println("Test took " + duration + " ns");
 		
-		long endTime = System.nanoTime();
-		long duration = (endTime - startTime) / 1000000;
-		skipList.PrintList();
-		System.out.println("Test took " + duration + "ms");
+		
+		
+		
+		// repeat process with treeMap
+		threadList.clear();
+		
+		for(int i = 0; i < numThreads; i++){
+			ProgramThread newThread = new ProgramThread(treeMap, i, numOperations/numThreads, "contains");
+		    threadList.add(newThread);									// add it to the array list
+		}
+		
+		startTime = System.nanoTime();
+		
+		threadItr = threadList.iterator();
+		while( threadItr.hasNext() ){							// start each thread
+			ProgramThread current = threadItr.next();
+			current.start();
+		}
+		
+		threadItr = threadList.iterator();
+		while( threadItr.hasNext() ){	
+			try {												// call join on it so main waits for it
+				ProgramThread current = threadItr.next();
+				current.join();
+			} catch (InterruptedException e) {
+				System.out.println("Interrupted, but nobody cares :D");
+			}
+		}
+
+		duration = (System.nanoTime() - startTime);
+
+		System.out.println("Test took " + duration + " ns");
+		
+		
+		
+		
+		
 	}
 }
 
-/*
- * ContainsTest
- *  a thread that does 10,000 random contains test on the concurrent skiplist
- *  I start 10 of these threads above
- */
-class ContainsTest extends Thread
-{
-   ConcurrentSkipList dataSet;
-   Random rand = new Random();
-   int num;
-   public ContainsTest(ConcurrentSkipList skipList, int number){
-	   super();
-	   dataSet = skipList;
-	   num = number;
-   }
-   public void run ()
-   {
-	    for(int i = 0; i < 100; i++){
-	    	dataSet.contains(rand.nextInt(100));
-	    }
-	    System.out.println("Thread finishing: " + this.num);
-   }
-}
