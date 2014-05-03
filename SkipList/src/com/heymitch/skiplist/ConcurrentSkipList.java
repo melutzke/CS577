@@ -3,6 +3,7 @@ package com.heymitch.skiplist;
 // http://www.cs.bgu.ac.il/~mpam092/wiki.files/LazySkipList.pdf
 // the paper this code is based on
 
+import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -221,32 +222,35 @@ public class ConcurrentSkipList<T> {
 
 	public void PrintList() {
 
-
-		// print out the entire list :D !
-		for(int i = 0; i <= MAX_LEVEL; i++){
-			boolean printedAtThisLevel = false;	// i use this to not print levels we didn't insert anything on
-			Node<T> current = head;
-			String lvlString = "Level " + i + ": ";
-			while(current.next[i] != tail){ // while we haven't hit the tail of the list, print node out
-				printedAtThisLevel = true;
-				lvlString += current.next[i].item.toString() + ", ";
-				current = current.next[i]; // advance dat pointer
-			}
-			if( ! printedAtThisLevel ){
-				continue; // avoid printing if no nodes to print
-			} else {
-				System.out.println( lvlString );
+		ArrayList<Node<T>> nodes = new ArrayList<Node<T>>();
+		int highestNode = 0;
+		int currentNode = 0;
+		
+		Node<T> current = head;
+		while(current.next[0] != tail){
+			nodes.add(current);
+			current = current.next[0];
+			if(current.topLevel > highestNode) {
+				highestNode = current.topLevel;
 			}
 		}
-
-		//	IF we wanted to only traverse the list, we could reduce the code to
-		//	for(int i = 0; i < MAX_LEVEL; i++){
-		//		Node<T> current = head;
-		//		while(current.next[i] != tail){ // while we haven't hit the tail of the list, print node out
-		//			// perform operation here
-		//			current = current.next[i]; // advance dat pointer
-		//		}
-		//	}
+		
+		// print out the entire list :D !
+		for(int lvl = highestNode; lvl >= 0; lvl--){
+			String lvlString = "Level " + lvl + ": ";
+			
+			for(int node = 1; node < nodes.size(); node++) {
+				if(lvl <= nodes.get(node).topLevel) {
+					lvlString += nodes.get(node).item.toString() + "\t";
+				//} else if (lvl > highestNode) {
+					//break;
+				} else {
+					lvlString += "\t";
+				}
+			}
+			
+			System.out.println( lvlString );
+		}
 
 	}
 
