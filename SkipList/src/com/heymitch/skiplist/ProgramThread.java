@@ -56,12 +56,32 @@ class ProgramThread extends Thread
 					treeSet.put( randKey, randKey );
 				}
 			}
-		}
-		else {
+		} else if(type == "database"){
+			for(int i = 0; i < numberOfOperations; i++){
+				int randOp = rand.nextInt(10) + 1;
+				if(randOp >= 8){
+					if( skipSet != null){
+						skipSet.remove( rand.nextInt( 10000 ) );
+					} else {
+						treeSet.remove( rand.nextInt( 10000 ) );
+					}
+				} else if(randOp >= 5){
+					if( skipSet != null){
+						skipSet.add( rand.nextInt( 10000 ) );
+					} else {
+						int newInt = rand.nextInt( 10000 );
+						treeSet.put( newInt, newInt );
+					}
+				} else {
+					if( skipSet != null){
+						skipSet.contains( rand.nextInt( 10000) );
+					} else {
+						treeSet.containsKey( rand.nextInt( 10000) );
+					}
+				}
+			}
+		} else {
 			System.out.println("Invalid argument");
 		}
-
-
-		System.out.println("Test: " + dataType + ", " + type + ", Thread finishing: " + this.num);
 	}
 }

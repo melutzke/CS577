@@ -105,7 +105,9 @@ public class MainClass
 				
 			}
 			
-			System.out.println("Avg time " + test.toUpperCase() + " -- Skiplist: " + skipListTime / iterations / 1000000 + "ms -- TreeMap: " + treeMapTime / iterations / 1000000 + "ms" );
+			System.out.println("Avg time " + test.toUpperCase() 
+					+ " -- Skiplist: " + skipListTime / iterations / 1000000 
+					+ "ms -- TreeMap: " + treeMapTime / iterations / 1000000 + "ms" );
 			
 			
 		}
