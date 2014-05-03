@@ -72,7 +72,7 @@ public class ConcurrentSkipList<T> {
 
 	boolean add(T x) {
 		num_locked_nodes = 0;
-		int topLevel = randomLevel();							// get a randomLevel to make the toplevel of new node
+		int topLevel = 1;							// get a randomLevel to make the toplevel of new node
 		// set top level we've inserted a node, prevents unnecessarily
 		// looking at empty levels during a find
 		if( topLevel > max_level_inserted ) max_level_inserted = topLevel;

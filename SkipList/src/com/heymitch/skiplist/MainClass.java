@@ -12,8 +12,8 @@ public class MainClass
 		
 		ArrayList threadList = new ArrayList<ProgramThread>();	// arrayList of ProgramThread threads
 		
-		int numThreads = 8;
-		int numOperations = 100000;
+		int numThreads = 1;
+		int numOperations = 100;
 		
 		long startTime, duration;
 		
@@ -25,7 +25,7 @@ public class MainClass
 		// test the skiplist!
 		
 		for(int i = 0; i < numThreads; i++){
-			ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, "contains");
+			ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, "add");
 		    threadList.add(newThread);									// add it to the array list
 		}
 		
@@ -59,7 +59,7 @@ public class MainClass
 		threadList.clear();
 		
 		for(int i = 0; i < numThreads; i++){
-			ProgramThread newThread = new ProgramThread(treeMap, i, numOperations/numThreads, "contains");
+			ProgramThread newThread = new ProgramThread(treeMap, i, numOperations/numThreads, "add");
 		    threadList.add(newThread);									// add it to the array list
 		}
 		

@@ -45,8 +45,19 @@ class ProgramThread extends Thread
 				} else {
 					treeSet.containsKey( randKey );
 				}
-				
 			}
+		} 
+		else if(type == "add") {
+			for(int i = 0; i < numberOfOperations; i++) {
+				if( skipSet != null ){
+					skipSet.add( i );
+				} else {
+					treeSet.put( i, i );
+				}
+			}
+		}
+		else {
+			System.out.println("Invalid argument");
 		}
 
 
