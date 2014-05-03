@@ -67,12 +67,15 @@ public class ConcurrentSkipList<T> {
 			succs[level] = curr;	// builds an array of nodes AFTER the one we're looking for
 			// storing the successor for node we want for that level
 		}
+		//System.out.println(num_drop_downs + " drop downs and " + num_skips_fwd + " skips fwd to find " + x);
 		return lFound;				// returns the level the key was found at (-1 if not found)
 	}
 
 	boolean add(T x) {
 		num_locked_nodes = 0;
-		int topLevel = 1;							// get a randomLevel to make the toplevel of new node
+		//num_drop_downs = 0;
+		//num_skips_fwd = 0;
+		int topLevel = randomLevel();							// get a randomLevel to make the toplevel of new node
 		// set top level we've inserted a node, prevents unnecessarily
 		// looking at empty levels during a find
 		if( topLevel > max_level_inserted ) max_level_inserted = topLevel;
@@ -150,8 +153,7 @@ public class ConcurrentSkipList<T> {
 				// to true, so other threads know this node is good for use
 				return true;				// return true to indicate the node has been successfully added and fully linked
 			} finally {
-				//System.out.println(num_locked_nodes + " nodes locked when adding " + x);
-				num_locked_nodes = 0;
+				//System.out.println(num_drop_downs + " drop downs and " + num_skips_fwd + " skips fwd");
 				for (int level = 0; level <= highestLocked; level++)
 					preds[level].unlock();	// unlock the predecessors we locked previously at each level
 			}   

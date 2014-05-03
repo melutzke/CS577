@@ -22,10 +22,11 @@ public class MainClass
 			treeMap.put(i,i);
 		}
 		
+		
 		// test the skiplist!
 		
 		for(int i = 0; i < numThreads; i++){
-			ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, "add");
+			ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, "contains");
 		    threadList.add(newThread);									// add it to the array list
 		}
 		
@@ -59,7 +60,7 @@ public class MainClass
 		threadList.clear();
 		
 		for(int i = 0; i < numThreads; i++){
-			ProgramThread newThread = new ProgramThread(treeMap, i, numOperations/numThreads, "add");
+			ProgramThread newThread = new ProgramThread(treeMap, i, numOperations/numThreads, "contains");
 		    threadList.add(newThread);									// add it to the array list
 		}
 		

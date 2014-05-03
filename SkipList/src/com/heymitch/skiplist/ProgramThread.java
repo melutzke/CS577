@@ -49,10 +49,11 @@ class ProgramThread extends Thread
 		} 
 		else if(type == "add") {
 			for(int i = 0; i < numberOfOperations; i++) {
+				int randKey = rand.nextInt(100000);
 				if( skipSet != null ){
-					skipSet.add( i );
+					skipSet.add( randKey );
 				} else {
-					treeSet.put( i, i );
+					treeSet.put( randKey, randKey );
 				}
 			}
 		}
