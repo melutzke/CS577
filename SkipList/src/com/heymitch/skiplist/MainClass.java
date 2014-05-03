@@ -11,7 +11,7 @@ public class MainClass
 		
 		ArrayList threadList = new ArrayList<ProgramThread>();	// arrayList of ProgramThread threads
 		
-		int numThreads = 8;
+		int numThreads = 128;
 		int numOperations = 1000000;		// 1 MEEELEEEON OPERATIONS
 		Iterator<ProgramThread> threadItr;
 		
@@ -19,7 +19,7 @@ public class MainClass
 		long skipListTime = 0;
 		long treeMapTime = 0;
 		
-		int iterations = 10;
+		int iterations = 5;
 		
 		// INITIALIZE DATASETS
 		String[] tests = {"contains", "add", "database"};
@@ -46,7 +46,7 @@ public class MainClass
 				
 				// test the skiplist!
 				for(int i = 0; i < numThreads; i++){
-					ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, "contains");
+					ProgramThread newThread = new ProgramThread(skipList, i, numOperations/numThreads, test);
 				    threadList.add(newThread);									// add it to the array list
 				}
 				
